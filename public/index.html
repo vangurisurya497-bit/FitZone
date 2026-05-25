@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="FitZone - Ultra Premium Gym & Fitness Center. Realize your potential with 3D interactive coaching, personal trainers, dynamic fitness classes and modern equipment.">
+  <title>FitZone | Premium Gym & Fitness Club</title>
+  
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="/css/style.css">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Three.js Library for 3D Equipment -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+
+  <!-- Floating Video Background Controls -->
+  <div class="bg-video-container" id="video-bg-container">
+    <video autoplay muted loop id="bg-video">
+      <!-- High quality workout looping background -->
+      <source src="https://assets.mixkit.co/videos/preview/mixkit-man-training-with-dumbbells-in-slow-motion-41857-large.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="bg-overlay"></div>
+  <div class="grid-overlay"></div>
+
+  <!-- Toggle button for background video -->
+  <button class="video-toggle" id="toggle-video-btn" title="Toggle Video Background">
+    <span class="status-dot"></span>
+    <span class="toggle-text">Video BG: ON</span>
+  </button>
+
+  <!-- Header & Navigation -->
+  <header id="header">
+    <div class="nav-container">
+      <a href="#home" class="logo">
+        <i class="fa-solid fa-bolt"></i><span>FIT</span>ZONE
+      </a>
+      <ul class="nav-menu" id="nav-menu">
+        <li><a href="#home" class="nav-link active">Home</a></li>
+        <li><a href="#classes" class="nav-link">Classes</a></li>
+        <li><a href="#trainers" class="nav-link">Trainers</a></li>
+        <li><a href="#pricing" class="nav-link">Pricing</a></li>
+        <li><a href="#contact" class="nav-link">Contact</a></li>
+      </ul>
+      <button class="hamburger" id="hamburger-btn" aria-label="Toggle Menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ==================== PAGE 1: HOME ==================== -->
+  <section id="home" class="view-section active">
+    <div class="hero-wrapper">
+      <div class="hero-content">
+        <div class="hero-tag">
+          <span class="pulse-dot"></span>
+          New Elite Membership Open
+        </div>
+        <h1 class="hero-title">Forge Your <br><span class="gradient-text">Ultimate Self</span></h1>
+        <p class="hero-desc">Experience training in a whole new dimension. Premium equipment, elite coaches, and custom progress tracking tools to elevate your performance.</p>
+        
+        <div class="hero-ctas">
+          <a href="#classes" class="btn btn-primary nav-trigger">Book a Class</a>
+          <a href="#pricing" class="btn btn-outline nav-trigger">View Pricing</a>
+        </div>
+
+        <div class="hero-stats">
+          <div class="stat-item">
+            <span class="stat-num" id="stat-members">1,200<span>+</span></span>
+            <span class="stat-label">Active Members</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num" id="stat-coaches">15<span>+</span></span>
+            <span class="stat-label">Certified Coaches</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-num" id="stat-area">15k<span>sqft</span></span>
+            <span class="stat-label">Luxury Gym Space</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3D Dumbbell Graphics Area -->
+      <div class="hero-graphics">
+        <div class="graphics-glow"></div>
+        <div id="three-canvas-container"></div>
+      </div>
+    </div>
+
+    <!-- Offer Countdown Banner -->
+    <div class="offer-banner">
+      <div class="offer-text">
+        <i class="fa-solid fa-fire accent-text"></i>
+        <span>Special Launch Offer: <strong>50% Off Elite Membership</strong></span>
+      </div>
+      <div class="offer-timer" id="countdown-timer">
+        <div class="timer-segment">
+          <span class="timer-num" id="days">00</span>
+          <span class="timer-label">Days</span>
+        </div>
+        <div class="timer-segment">
+          <span class="timer-num" id="hours">00</span>
+          <span class="timer-label">Hrs</span>
+        </div>
+        <div class="timer-segment">
+          <span class="timer-num" id="minutes">00</span>
+          <span class="timer-label">Mins</span>
+        </div>
+        <div class="timer-segment">
+          <span class="timer-num" id="seconds">00</span>
+          <span class="timer-label">Secs</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Before/After transformation slider -->
+    <div class="before-after-section">
+      <div class="section-header">
+        <span class="section-tag">Transformations</span>
+        <h2 class="section-title">Real Results, Real People</h2>
+        <p class="section-desc">Drag the slider horizontally to view the before & after transformation of our members.</p>
+      </div>
+
+      <div class="comparison-slider" id="comparison-slider">
+        <div class="image-before">
+          <!-- Placeholder/Rendered Gym Before Image path -->
+          <img src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?q=80&w=1000&auto=format&fit=crop" alt="Before Workout">
+          <span class="slider-label before">Before (Day 1)</span>
+        </div>
+        <div class="image-after" id="image-after">
+          <!-- Placeholder/Rendered Gym After Image path -->
+          <img src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=1000&auto=format&fit=crop" alt="After Workout">
+          <span class="slider-label after">After (Day 90)</span>
+        </div>
+        <div class="slider-handle" id="slider-handle">
+          <svg viewBox="0 0 24 24">
+            <path d="M8 7l-5 5 5 5V7zm8 0v10l5-5-5-5z"/>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <!-- Workout Tips Cards Section -->
+    <div class="home-tips-section">
+      <div class="section-header">
+        <span class="section-tag">FitZone Insights</span>
+        <h2 class="section-title">Trainer Workout Tips</h2>
+        <p class="section-desc">Daily advice curated by our elite level professional coaches to accelerate your goals.</p>
+      </div>
+
+      <div class="tips-grid">
+        <div class="glass-card tip-card">
+          <div class="tip-icon"><i class="fa-solid fa-apple-whole"></i></div>
+          <h3>Anabolic Window Myth</h3>
+          <p>You don't need to chug a protein shake within 30 minutes of training. Focus on hitting your total daily protein goal and eating high-quality meals balanced throughout the day.</p>
+        </div>
+        <div class="glass-card tip-card accent-card">
+          <div class="tip-icon"><i class="fa-solid fa-dumbbell"></i></div>
+          <h3>Progressive Overload</h3>
+          <p>To grow, you must challenge your muscles. Track your weights weekly and aim to increase either the weight, reps, or improve your range of motion/tempo in every workout session.</p>
+        </div>
+        <div class="glass-card tip-card">
+          <div class="tip-icon"><i class="fa-solid fa-bed"></i></div>
+          <h3>Sleep & Muscle Growth</h3>
+          <p>Muscles don't grow when you lift; they grow while you sleep. Aim for 7-9 hours of deep sleep to trigger human growth hormone (HGH) release and repair damaged muscle fibers.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== PAGE 2: CLASSES ==================== -->
+  <section id="classes" class="view-section">
+    <div class="classes-container">
+      <div class="section-header">
+        <span class="section-tag">Weekly Sessions</span>
+        <h2 class="section-title">Choose Your Class</h2>
+        <p class="section-desc">From high-intensity functional cardio to deep restorative yoga, find the perfect workout for your mood and goals.</p>
+      </div>
+
+      <!-- Filters -->
+      <div class="class-filters">
+        <button class="filter-btn active" data-filter="all">All Disciplines</button>
+        <button class="filter-btn" data-filter="strength">Strength</button>
+        <button class="filter-btn" data-filter="cardio">Cardio & HIIT</button>
+        <button class="filter-btn" data-filter="mindbody">Mind & Body</button>
+      </div>
+
+      <!-- Grid -->
+      <div class="classes-grid" id="classes-grid">
+        <!-- Class 1: Strength -->
+        <div class="class-card" data-category="strength">
+          <div class="class-img-box">
+            <span class="class-badge">Strength</span>
+            <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?q=80&w=600&auto=format&fit=crop" alt="Iron Powerlifting">
+          </div>
+          <div class="class-info">
+            <h3 class="class-title">Iron Powerlifting</h3>
+            <div class="class-meta">
+              <span><i class="fa-solid fa-clock"></i> 60 Mins</span>
+              <span><i class="fa-solid fa-fire"></i> 550 kcal</span>
+            </div>
+            <p class="class-description">Focus on primary compound lifts—Squat, Bench Press, and Deadlift. Master correct barbell mechanics under heavy load.</p>
+            <div class="class-footer">
+              <div class="class-trainer">
+                <img src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?q=80&w=150&auto=format&fit=crop" alt="Marcus" class="trainer-avatar">
+                <span class="trainer-name">Coach Marcus</span>
+              </div>
+              <button class="btn btn-primary btn-book-sm open-booking-modal" data-class="Iron Powerlifting">Book Now</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Class 2: Cardio -->
+        <div class="class-card" data-category="cardio">
+          <div class="class-img-box">
+            <span class="class-badge">Cardio</span>
+            <img src="https://images.unsplash.com/photo-1518310383802-640c2de311b2?q=80&w=600&auto=format&fit=crop" alt="Metabolic HIIT">
+          </div>
+          <div class="class-info">
+            <h3 class="class-title">Metabolic HIIT</h3>
+            <div class="class-meta">
+              <span><i class="fa-solid fa-clock"></i> 45 Mins</span>
+              <span><i class="fa-solid fa-fire"></i> 700 kcal</span>
+            </div>
+            <p class="class-description">Short bursts of explosive cardio exercises followed by active rest intervals. Guaranteed to keep your heart pumping.</p>
+            <div class="class-footer">
+              <div class="class-trainer">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=150&auto=format&fit=crop" alt="Serena" class="trainer-avatar">
+                <span class="trainer-name">Coach Serena</span>
+              </div>
+              <button class="btn btn-primary btn-book-sm open-booking-modal" data-class="Metabolic HIIT">Book Now</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Class 3: Mind & Body -->
+        <div class="class-card" data-category="mindbody">
+          <div class="class-img-box">
+            <span class="class-badge">Mind & Body</span>
+            <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=600&auto=format&fit=crop" alt="Zen Flow Vinyasa">
+          </div>
+          <div class="class-info">
+            <h3 class="class-title">Zen Flow Vinyasa</h3>
+            <div class="class-meta">
+              <span><i class="fa-solid fa-clock"></i> 60 Mins</span>
+              <span><i class="fa-solid fa-fire"></i> 300 kcal</span>
+            </div>
+            <p class="class-description">A slow, smooth synchronization of movement and breath. Ideal for enhancing joint flexibility and mental clarity.</p>
+            <div class="class-footer">
+              <div class="class-trainer">
+                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=150&auto=format&fit=crop" alt="Aria" class="trainer-avatar">
+                <span class="trainer-name">Coach Aria</span>
+              </div>
+              <button class="btn btn-primary btn-book-sm open-booking-modal" data-class="Zen Flow Vinyasa">Book Now</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Class 4: Strength -->
+        <div class="class-card" data-category="strength">
+          <div class="class-img-box">
+            <span class="class-badge">Strength</span>
+            <img src="https://images.unsplash.com/photo-1517838277536-f5f99be501cd?q=80&w=600&auto=format&fit=crop" alt="Hypertrophy Club">
+          </div>
+          <div class="class-info">
+            <h3 class="class-title">Hypertrophy Club</h3>
+            <div class="class-meta">
+              <span><i class="fa-solid fa-clock"></i> 60 Mins</span>
+              <span><i class="fa-solid fa-fire"></i> 480 kcal</span>
+            </div>
+            <p class="class-description">Focus strictly on isolating specific muscle groups to stimulate growth, optimize pump, and improve muscle shape.</p>
+            <div class="class-footer">
+              <div class="class-trainer">
+                <img src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?q=80&w=150&auto=format&fit=crop" alt="Marcus" class="trainer-avatar">
+                <span class="trainer-name">Coach Marcus</span>
+              </div>
+              <button class="btn btn-primary btn-book-sm open-booking-modal" data-class="Hypertrophy Club">Book Now</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Class 5: Cardio -->
+        <div class="class-card" data-category="cardio">
+          <div class="class-img-box">
+            <span class="class-badge">Cardio</span>
+            <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?q=80&w=600&auto=format&fit=crop" alt="Spin Revolution">
+          </div>
+          <div class="class-info">
+            <h3 class="class-title">Spin Revolution</h3>
+            <div class="class-meta">
+              <span><i class="fa-solid fa-clock"></i> 50 Mins</span>
+              <span><i class="fa-solid fa-fire"></i> 650 kcal</span>
+            </div>
+            <p class="class-description">Indoor cycling experience driven by heavy bass, lights, and target RPM zones to scorch body fat.</p>
+            <div class="class-footer">
+              <div class="class-trainer">
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=150&auto=format&fit=crop" alt="Serena" class="trainer-avatar">
+                <span class="trainer-name">Coach Serena</span>
+              </div>
+              <button class="btn btn-primary btn-book-sm open-booking-modal" data-class="Spin Revolution">Book Now</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Class 6: Mind & Body -->
+        <div class="class-card" data-category="mindbody">
+          <div class="class-img-box">
+            <span class="class-badge">Mind & Body</span>
+            <img src="https://images.unsplash.com/photo-1518611012118-696072aa579a?q=80&w=600&auto=format&fit=crop" alt="Power Pilates">
+          </div>
+          <div class="class-info">
+            <h3 class="class-title">Power Pilates</h3>
+            <div class="class-meta">
+              <span><i class="fa-solid fa-clock"></i> 50 Mins</span>
+              <span><i class="fa-solid fa-fire"></i> 350 kcal</span>
+            </div>
+            <p class="class-description">Core-focused exercise designed to strengthen deep abdominal walls, stabilize posture and build functional mobility.</p>
+            <div class="class-footer">
+              <div class="class-trainer">
+                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=150&auto=format&fit=crop" alt="Aria" class="trainer-avatar">
+                <span class="trainer-name">Coach Aria</span>
+              </div>
+              <button class="btn btn-primary btn-book-sm open-booking-modal" data-class="Power Pilates">Book Now</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Schedule Table Section -->
+      <div class="schedule-container">
+        <div class="schedule-header">
+          <span class="section-tag">Timetable</span>
+          <h2 class="section-title">Class Schedule</h2>
+        </div>
+
+        <div class="schedule-table-wrap">
+          <table class="schedule-table">
+            <thead>
+              <tr>
+                <th>Time Slot</th>
+                <th>Monday</th>
+                <th>Tuesday</th>
+                <th>Wednesday</th>
+                <th>Thursday</th>
+                <th>Friday</th>
+                <th>Saturday</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>06:00 AM - 07:00 AM</strong></td>
+                <td>
+                  <span class="class-slot">Metabolic HIIT</span>
+                  <span class="slot-trainer-name">Serena</span>
+                </td>
+                <td>
+                  <span class="class-slot">Zen Flow</span>
+                  <span class="slot-trainer-name">Aria</span>
+                </td>
+                <td>
+                  <span class="class-slot">Metabolic HIIT</span>
+                  <span class="slot-trainer-name">Serena</span>
+                </td>
+                <td>
+                  <span class="class-slot">Zen Flow</span>
+                  <span class="slot-trainer-name">Aria</span>
+                </td>
+                <td>
+                  <span class="class-slot">Metabolic HIIT</span>
+                  <span class="slot-trainer-name">Serena</span>
+                </td>
+                <td>
+                  <span class="class-slot">Spin Revolution</span>
+                  <span class="slot-trainer-name">Serena</span>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>09:00 AM - 10:00 AM</strong></td>
+                <td>
+                  <span class="class-slot">Powerlifting</span>
+                  <span class="slot-trainer-name">Marcus</span>
+                </td>
+                <td>
+                  <span class="class-slot">Hypertrophy</span>
+                  <span class="slot-trainer-name">Marcus</span>
+                </td>
+                <td>
+                  <span class="class-slot">Powerlifting</span>
+                  <span class="slot-trainer-name">Marcus</span>
+                </td>
+                <td>
+                  <span class="class-slot">Hypertrophy</span>
+                  <span class="slot-trainer-name">Marcus</span>
+                </td>
+                <td>
+                  <span class="class-slot">Powerlifting</span>
+                  <span class="slot-trainer-name">Marcus</span>
+                </td>
+                <td>
+                  <span class="class-slot">Pilates</span>
+                  <span class="slot-trainer-name">Aria</span>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>05:00 PM - 06:00 PM</strong></td>
+                <td>
+                  <span class="class-slot">Spin Revolution</span>
+                  <span class="slot-trainer-name">Serena</span>
+                </td>
+                <td>
+                  <span class="class-slot">Powerlifting</span>
+                  <span class="slot-trainer-name">Marcus</span>
+                </td>
+                <td>
+                  <span class="class-slot">Spin Revolution</span>
+                  <span class="slot-trainer-name">Serena</span>
+                </td>
+                <td>
+                  <span class="class-slot">Powerlifting</span>
+                  <span class="slot-trainer-name">Marcus</span>
+                </td>
+                <td>
+                  <span class="class-slot">Spin Revolution</span>
+                  <span class="slot-trainer-name">Serena</span>
+                </td>
+                <td>
+                  <span class="class-slot">Zen Flow</span>
+                  <span class="slot-trainer-name">Aria</span>
+                </td>
+              </tr>
+              <tr>
+                <td><strong>07:00 PM - 08:00 PM</strong></td>
+                <td>
+                  <span class="class-slot">Hypertrophy</span>
+                  <span class="slot-trainer-name">Marcus</span>
+                </td>
+                <td>
+                  <span class="class-slot">Pilates</span>
+                  <span class="slot-trainer-name">Aria</span>
+                </td>
+                <td>
+                  <span class="class-slot">Hypertrophy</span>
+                  <span class="slot-trainer-name">Marcus</span>
+                </td>
+                <td>
+                  <span class="class-slot">Pilates</span>
+                  <span class="slot-trainer-name">Aria</span>
+                </td>
+                <td>
+                  <span class="class-slot">Hypertrophy</span>
+                  <span class="slot-trainer-name">Marcus</span>
+                </td>
+                <td>
+                  <span class="class-slot">- Rest -</span>
+                  <span class="slot-time">Closed early</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== PAGE 3: TRAINERS ==================== -->
+  <section id="trainers" class="view-section">
+    <div class="trainers-container">
+      <div class="section-header">
+        <span class="section-tag">Elite Level Guides</span>
+        <h2 class="section-title">Meet Our Coaches</h2>
+        <p class="section-desc">Certified experts dedicated to correcting your form, designing diet structures, and pushing your performance parameters.</p>
+      </div>
+
+      <div class="trainers-grid">
+        <!-- Trainer 1 -->
+        <div class="trainer-card">
+          <div class="trainer-img-wrap">
+            <img src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?q=80&w=500&auto=format&fit=crop" alt="Coach Marcus">
+            <div class="trainer-socials">
+              <a href="#" class="social-icon-btn"><i class="fa-brands fa-instagram"></i></a>
+              <a href="#" class="social-icon-btn"><i class="fa-brands fa-twitter"></i></a>
+              <a href="#" class="social-icon-btn"><i class="fa-solid fa-envelope"></i></a>
+            </div>
+          </div>
+          <div class="trainer-bio">
+            <span class="trainer-role">Strength & Conditioning</span>
+            <h3 class="trainer-card-name">Coach Marcus</h3>
+            <div class="trainer-specialties">
+              <span class="spec-badge">Powerlifting</span>
+              <span class="spec-badge">Hypertrophy</span>
+              <span class="spec-badge">Bio-Mechanics</span>
+            </div>
+            <div class="trainer-experience">
+              <i class="fa-solid fa-award primary-text"></i> 8+ Years Coaching Experience
+            </div>
+          </div>
+        </div>
+
+        <!-- Trainer 2 -->
+        <div class="trainer-card">
+          <div class="trainer-img-wrap">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=500&auto=format&fit=crop" alt="Coach Serena">
+            <div class="trainer-socials">
+              <a href="#" class="social-icon-btn"><i class="fa-brands fa-instagram"></i></a>
+              <a href="#" class="social-icon-btn"><i class="fa-brands fa-youtube"></i></a>
+              <a href="#" class="social-icon-btn"><i class="fa-solid fa-envelope"></i></a>
+            </div>
+          </div>
+          <div class="trainer-bio">
+            <span class="trainer-role">Functional HIIT specialist</span>
+            <h3 class="trainer-card-name">Coach Serena</h3>
+            <div class="trainer-specialties">
+              <span class="spec-badge">HIIT & Cardio</span>
+              <span class="spec-badge">Fat Loss Coach</span>
+              <span class="spec-badge">Nutritionist</span>
+            </div>
+            <div class="trainer-experience">
+              <i class="fa-solid fa-award primary-text"></i> 6+ Years Coaching Experience
+            </div>
+          </div>
+        </div>
+
+        <!-- Trainer 3 -->
+        <div class="trainer-card">
+          <div class="trainer-img-wrap">
+            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=500&auto=format&fit=crop" alt="Coach Aria">
+            <div class="trainer-socials">
+              <a href="#" class="social-icon-btn"><i class="fa-brands fa-instagram"></i></a>
+              <a href="#" class="social-icon-btn"><i class="fa-brands fa-tiktok"></i></a>
+              <a href="#" class="social-icon-btn"><i class="fa-solid fa-envelope"></i></a>
+            </div>
+          </div>
+          <div class="trainer-bio">
+            <span class="trainer-role">Yoga & Mobility master</span>
+            <h3 class="trainer-card-name">Coach Aria</h3>
+            <div class="trainer-specialties">
+              <span class="spec-badge">Vinyasa Yoga</span>
+              <span class="spec-badge">Pilates</span>
+              <span class="spec-badge">Posture Correction</span>
+            </div>
+            <div class="trainer-experience">
+              <i class="fa-solid fa-award primary-text"></i> 5+ Years Coaching Experience
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3D Muscle Highlight Map Widget -->
+      <div class="muscle-map-section">
+        <div class="section-header">
+          <span class="section-tag">Interactive Guide</span>
+          <h2 class="section-title">Muscle Target Map</h2>
+          <p class="section-desc">Click on any muscle group in the dashboard vector below to show target workouts & coaches.</p>
+        </div>
+
+        <div class="muscle-grid">
+          <!-- Muscle SVG graphic -->
+          <div class="muscle-svg-box">
+            <svg viewBox="0 0 200 400" id="muscle-svg">
+              <!-- Outline of body -->
+              <rect x="90" y="10" width="20" height="20" rx="10" class="muscle-path" data-muscle="shoulders" />
+              <!-- Head -->
+              <circle cx="100" cy="40" r="15" fill="#181818" stroke="rgba(255,255,255,0.15)" stroke-width="1.5" />
+              
+              <!-- Shoulders -->
+              <path d="M 75,65 Q 85,60 100,60 Q 115,60 125,65 L 132,80 L 122,85 L 118,70 L 82,70 L 78,85 L 68,80 Z" class="muscle-path" data-muscle="shoulders" />
+              
+              <!-- Chest -->
+              <path d="M 83,72 H 117 V 98 H 83 Z" class="muscle-path" data-muscle="chest" />
+              <line x1="100" y1="72" x2="100" y2="98" stroke="rgba(255,255,255,0.2)" stroke-width="1" />
+              
+              <!-- Core / Abs -->
+              <path d="M 85,100 H 115 L 112,145 H 88 Z" class="muscle-path" data-muscle="abs" />
+              <!-- Ab details -->
+              <line x1="100" y1="100" x2="100" y2="145" stroke="rgba(255,255,255,0.15)" stroke-width="1" />
+              <line x1="88" y1="115" x2="112" y2="115" stroke="rgba(255,255,255,0.15)" stroke-width="1" />
+              <line x1="89" y1="130" x2="111" y2="130" stroke="rgba(255,255,255,0.15)" stroke-width="1" />
+
+              <!-- Biceps / Arms -->
+              <!-- Left arm -->
+              <path d="M 66,82 Q 60,105 57,130 L 67,130 Q 70,110 77,87 Z" class="muscle-path" data-muscle="arms" />
+              <!-- Right arm -->
+              <path d="M 134,82 Q 140,105 143,130 L 133,130 Q 130,110 123,87 Z" class="muscle-path" data-muscle="arms" />
+              
+              <!-- Legs / Quads -->
+              <!-- Left leg -->
+              <path d="M 84,150 Q 80,210 74,270 L 88,270 Q 94,210 98,150 Z" class="muscle-path accent-muscle" data-muscle="legs" />
+              <!-- Right leg -->
+              <path d="M 116,150 Q 120,210 126,270 L 112,270 Q 106,210 102,150 Z" class="muscle-path accent-muscle" data-muscle="legs" />
+
+              <!-- Calves -->
+              <!-- Left calf -->
+              <path d="M 74,278 L 71,350 L 81,350 L 86,278 Z" class="muscle-path" data-muscle="legs" />
+              <!-- Right calf -->
+              <path d="M 126,278 L 129,350 L 119,350 L 114,278 Z" class="muscle-path" data-muscle="legs" />
+            </svg>
+          </div>
+
+          <!-- Muscle feedback details panel -->
+          <div class="muscle-info-card" id="muscle-info-card">
+            <h3 id="muscle-title">Select a Muscle Group</h3>
+            <p id="muscle-desc">Interactive muscle focus allows you to click on the model map to view customized gym routines and see which trainers specialize in that region.</p>
+            
+            <ul class="workout-list" id="muscle-workouts">
+              <li class="workout-item">
+                <span class="workout-bullet"></span>
+                <span class="workout-name">Hover or click a muscle group...</span>
+                <span class="workout-detail">Get routines</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== PAGE 4: PRICING ==================== -->
+  <section id="pricing" class="view-section">
+    <div class="pricing-container">
+      <div class="section-header">
+        <span class="section-tag">Pricing Tiers</span>
+        <h2 class="section-title">Find Your Plan</h2>
+        <p class="section-desc">Flexible packages tailored for your consistency. No hidden fees. Cancel or freeze anytime.</p>
+      </div>
+
+      <!-- Pricing Switch Toggle -->
+      <div class="pricing-toggle-wrap">
+        <span id="monthly-label" class="active">Monthly</span>
+        <label class="toggle-switch">
+          <input type="checkbox" id="pricing-toggle">
+          <span class="toggle-slider"></span>
+        </label>
+        <span id="annual-label">Annual (Save 20%)</span>
+      </div>
+
+      <div class="pricing-grid">
+        <!-- Basic Plan -->
+        <div class="pricing-card">
+          <h3 class="plan-name">Basic Plan</h3>
+          <div class="plan-price-box">
+            <span class="plan-currency">₹</span>
+            <span class="plan-price" id="price-basic" data-monthly="999" data-annual="799">999</span>
+            <span class="plan-period">/month</span>
+          </div>
+          <ul class="plan-features">
+            <li><i class="fa-solid fa-circle-check"></i> Standard gym floor access</li>
+            <li><i class="fa-solid fa-circle-check"></i> Free lockers & showers</li>
+            <li><i class="fa-solid fa-circle-check"></i> 1 FitZone induction session</li>
+            <li><i class="fa-solid fa-circle-xmark" style="fill:#555;"></i> Group fitness classes</li>
+            <li><i class="fa-solid fa-circle-xmark" style="fill:#555;"></i> Personal trainer access</li>
+            <li><i class="fa-solid fa-circle-xmark" style="fill:#555;"></i> Diet plan consultation</li>
+          </ul>
+          <button class="btn btn-outline plan-cta open-booking-modal" data-class="Basic Membership Slot">Join Basic</button>
+        </div>
+
+        <!-- Premium Plan (Popular) -->
+        <div class="pricing-card popular">
+          <div class="popular-badge">Most Popular</div>
+          <h3 class="plan-name">Premium Plan</h3>
+          <div class="plan-price-box">
+            <span class="plan-currency">₹</span>
+            <span class="plan-price" id="price-premium" data-monthly="1999" data-annual="1599">1,999</span>
+            <span class="plan-period">/month</span>
+          </div>
+          <ul class="plan-features">
+            <li><i class="fa-solid fa-circle-check"></i> All basic floor amenities</li>
+            <li><i class="fa-solid fa-circle-check"></i> Unlimited group fitness classes</li>
+            <li><i class="fa-solid fa-circle-check"></i> 2 Personal training credits/mo</li>
+            <li><i class="fa-solid fa-circle-check"></i> Custom Diet plan formulation</li>
+            <li><i class="fa-solid fa-circle-check"></i> Steam bath & sauna access</li>
+            <li><i class="fa-solid fa-circle-xmark" style="fill:#555;"></i> Unlimited Personal Trainer</li>
+          </ul>
+          <button class="btn btn-primary plan-cta open-booking-modal" data-class="Premium Membership Slot">Join Premium</button>
+        </div>
+
+        <!-- Elite Plan -->
+        <div class="pricing-card">
+          <h3 class="plan-name">Elite Plan</h3>
+          <div class="plan-price-box">
+            <span class="plan-currency">₹</span>
+            <span class="plan-price" id="price-elite" data-monthly="3999" data-annual="3199">3,999</span>
+            <span class="plan-period">/month</span>
+          </div>
+          <ul class="plan-features">
+            <li><i class="fa-solid fa-circle-check"></i> 24/7 All-Access Pass (Global)</li>
+            <li><i class="fa-solid fa-circle-check"></i> Unlimited Group Fitness / Spin</li>
+            <li><i class="fa-solid fa-circle-check"></i> Unlimited 1-on-1 Personal Trainer</li>
+            <li><i class="fa-solid fa-circle-check"></i> Full body bio-impedance scans</li>
+            <li><i class="fa-solid fa-circle-check"></i> Weekly custom diet & prep check</li>
+            <li><i class="fa-solid fa-circle-check"></i> Massage therapy sessions</li>
+          </ul>
+          <button class="btn btn-accent plan-cta open-booking-modal" data-class="Elite Membership Slot">Join Elite</button>
+        </div>
+      </div>
+
+      <!-- BMI Calculator and Progress tracking section -->
+      <div class="bmi-progress-grid">
+        <!-- BMI Widget -->
+        <div class="glass-card bmi-card">
+          <div>
+            <span class="section-tag">Calculate</span>
+            <h3>BMI Index Calculator</h3>
+            <p style="color:var(--gray); font-size: 0.9rem; margin-top:5px;">Check your Body Mass Index (BMI) instantly using our metric health checker.</p>
+            
+            <div class="bmi-inputs">
+              <div class="form-group">
+                <label for="bmi-weight">Weight (kg)</label>
+                <input type="number" id="bmi-weight" class="form-control" placeholder="e.g. 75">
+              </div>
+              <div class="form-group">
+                <label for="bmi-height">Height (cm)</label>
+                <input type="number" id="bmi-height" class="form-control" placeholder="e.g. 175">
+              </div>
+            </div>
+
+            <button class="btn btn-primary" id="btn-calc-bmi" style="width: 100%;">Calculate BMI</button>
+          </div>
+
+          <div class="bmi-result-box" id="bmi-result-box">
+            <div class="bmi-result-value" id="bmi-result-val">22.5</div>
+            <div class="bmi-result-category" id="bmi-result-cat">Normal Range</div>
+            <div class="bmi-result-desc" id="bmi-result-desc">Great job! You maintain a healthy weight index profile.</div>
+          </div>
+        </div>
+
+        <!-- Progress Tracker Widget -->
+        <div class="glass-card progress-card">
+          <span class="section-tag">Interactive Dashboard</span>
+          <h3>Progress Tracker</h3>
+          <p style="color:var(--gray); font-size: 0.9rem; margin-top: 5px; margin-bottom: 15px;">Log your workouts and weigh-ins to plot your weight loss or gain path over time.</p>
+          
+          <div class="progress-stats-row">
+            <div class="p-stat-box">
+              <div class="p-stat-val" id="p-stat-start">82.5 kg</div>
+              <div class="p-stat-lbl">Start Weight</div>
+            </div>
+            <div class="p-stat-box">
+              <div class="p-stat-val" id="p-stat-current">81.0 kg</div>
+              <div class="p-stat-lbl">Current Weight</div>
+            </div>
+            <div class="p-stat-box">
+              <div class="p-stat-val" id="p-stat-diff">-1.5 kg</div>
+              <div class="p-stat-lbl">Weight Change</div>
+            </div>
+          </div>
+
+          <!-- Line chart canvas -->
+          <div class="progress-chart-container">
+            <canvas id="progress-chart"></canvas>
+          </div>
+
+          <!-- Log Weight form -->
+          <form class="progress-form" id="progress-log-form">
+            <div class="form-group" style="margin-bottom:0;">
+              <label for="p-form-date">Date</label>
+              <input type="date" id="p-form-date" class="form-control">
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label for="p-form-weight">Weight (kg)</label>
+              <input type="number" id="p-form-weight" step="0.1" class="form-control" required placeholder="80.5">
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label for="p-form-fat">Body Fat %</label>
+              <input type="number" id="p-form-fat" step="0.1" class="form-control" placeholder="19.5">
+            </div>
+            <button type="submit" class="btn btn-primary" style="padding: 10px 18px;"><i class="fa-solid fa-plus"></i></button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== PAGE 5: CONTACT ==================== -->
+  <section id="contact" class="view-section">
+    <div class="contact-container">
+      <div class="section-header">
+        <span class="section-tag">Get in Touch</span>
+        <h2 class="section-title">We Are Here For You</h2>
+        <p class="section-desc">Have questions about memberships, classes, or corporate training? Reach out and we'll reply within 2 hours.</p>
+      </div>
+
+      <div class="contact-grid">
+        <!-- Contact details -->
+        <div class="contact-info-panel">
+          <div>
+            <h3>FitZone HQ</h3>
+            <p style="color:var(--gray); margin-top:5px;">Visit our premium facilities or schedule a tour guide.</p>
+            
+            <div class="info-cards">
+              <!-- Card 1 -->
+              <div class="info-card">
+                <div class="info-card-icon"><i class="fa-solid fa-location-dot"></i></div>
+                <div class="info-card-content">
+                  <h4>Location</h4>
+                  <p>102 Luxury Gym Avenue, Sector 5, Bangalore, India</p>
+                </div>
+              </div>
+              <!-- Card 2 -->
+              <div class="info-card">
+                <div class="info-card-icon"><i class="fa-solid fa-phone"></i></div>
+                <div class="info-card-content">
+                  <h4>Phone & Email</h4>
+                  <p>+91 98765 43210 <br>support@fitzone.com</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- WhatsApp Enquiry Button -->
+          <div class="whatsapp-wrapper">
+            <a href="https://wa.me/919876543210?text=Hi%20FitZone%2C%20I%20would%20like%20to%20enquire%20about%20your%20premium%20membership%20plans." target="_blank" class="btn btn-whatsapp">
+              <svg viewBox="0 0 24 24">
+                <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.965C16.59 1.978 14.12 1.01 11.5 1.012c-5.437 0-9.863 4.37-9.866 9.801-.001 1.762.485 3.48 1.405 4.992l-.997 3.637 3.734-.975L6.647 19.16zM17.8 14.155c-.29-.145-1.716-.848-1.982-.945-.266-.097-.46-.145-.654.145-.194.29-.752.945-.921 1.139-.17.194-.34.218-.63.073-.29-.145-1.226-.452-2.336-1.444-.863-.77-1.446-1.72-1.616-2.011-.17-.29-.018-.447.127-.591.13-.13.29-.34.436-.51.145-.17.194-.29.29-.485.097-.194.049-.364-.024-.51-.073-.145-.654-1.577-.897-2.159-.236-.569-.475-.492-.654-.501-.17-.008-.364-.01-.558-.01-.194 0-.51.073-.776.364-.266.29-1.02 1.02-1.02 2.487 0 1.467 1.067 2.887 1.213 3.081.145.194 2.1 3.21 5.09 4.502.712.308 1.268.492 1.702.63.716.227 1.368.195 1.884.118.575-.085 1.716-.703 1.958-1.382.242-.679.242-1.261.17-1.382-.072-.121-.266-.194-.557-.34z"/>
+              </svg>
+              Enquire Via WhatsApp
+            </a>
+          </div>
+
+          <!-- SLEEK MAP -->
+          <div class="contact-map-card">
+            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3887.9734918712396!2d77.6101234153648!3d12.973123490854992!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae1670c9b44e6d%3A0xf8dfc3e8517e4fe0!2sMG%20Road%2C%20Bengaluru%2C%20Karnataka!5e0!3m2!1sen!2sin!4v1625829381792!5m2!1sen!2sin" allowfullscreen="" loading="lazy"></iframe>
+          </div>
+        </div>
+
+        <!-- Enquiry Form -->
+        <div class="glass-card contact-form-card">
+          <h3>Send Enquiries</h3>
+          
+          <form id="contact-enquiry-form">
+            <div class="form-group">
+              <label for="contact-name">Full Name</label>
+              <input type="text" id="contact-name" class="form-control" required placeholder="John Doe">
+            </div>
+            
+            <div class="form-group">
+              <label for="contact-email">Email Address</label>
+              <input type="email" id="contact-email" class="form-control" required placeholder="john@example.com">
+            </div>
+
+            <div class="form-group">
+              <label for="contact-phone">Phone Number</label>
+              <input type="tel" id="contact-phone" class="form-control" placeholder="+91 98765 43210">
+            </div>
+
+            <div class="form-group">
+              <label for="contact-msg">Message / Enquiry Details</label>
+              <textarea id="contact-msg" class="form-control" rows="5" required placeholder="Hi, I would like to schedule a tour of FitZone and enquire about peak hour slots for personal training."></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-accent" style="width: 100%;">Submit Message</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== FOOTER ==================== -->
+  <footer>
+    <div class="footer-content">
+      <div class="footer-logo-desc">
+        <a href="#home" class="logo">
+          <i class="fa-solid fa-bolt"></i><span>FIT</span>ZONE
+        </a>
+        <p class="footer-desc">Premium fitness workspace and high-end training club designed to push you beyond your limits. Luxury amenities meet advanced sports science.</p>
+      </div>
+
+      <div class="footer-links">
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="#home" class="nav-trigger">Home</a></li>
+          <li><a href="#classes" class="nav-trigger">Classes</a></li>
+          <li><a href="#trainers" class="nav-trigger">Trainers</a></li>
+          <li><a href="#pricing" class="nav-trigger">Pricing</a></li>
+          <li><a href="#contact" class="nav-trigger">Contact</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-links">
+        <h4>Gym Hours</h4>
+        <ul>
+          <li>Monday - Friday:<br><span style="color:var(--white);">5:00 AM - 11:00 PM</span></li>
+          <li>Saturday:<br><span style="color:var(--white);">6:00 AM - 9:00 PM</span></li>
+          <li>Sunday:<br><span style="color:var(--white);">8:00 AM - 4:00 PM</span></li>
+        </ul>
+      </div>
+
+      <div class="footer-newsletter">
+        <h4>Stay Updated</h4>
+        <p>Subscribe for workout advice and promotional offer alerts.</p>
+        <form class="newsletter-form" id="newsletter-form">
+          <input type="email" class="form-control" required placeholder="Your email">
+          <button type="submit" class="btn btn-primary"><i class="fa-solid fa-paper-plane"></i></button>
+        </form>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2026 FitZone Gym & Fitness Center. All Rights Reserved.</p>
+      <p>Designed with <i class="fa-solid fa-heart" style="color:var(--accent);"></i> for Peak Performance</p>
+    </div>
+  </footer>
+
+  <!-- ==================== CLASS BOOKING MODAL ==================== -->
+  <div class="modal-overlay" id="booking-modal-overlay">
+    <div class="modal-box">
+      <button class="modal-close" id="close-modal-btn">&times;</button>
+      <h3 class="modal-title">Book FitZone Slot</h3>
+      <p class="modal-desc">Fill in details to secure your spot. A confirmation email and SMS will be sent immediately.</p>
+      
+      <form id="class-booking-form">
+        <input type="hidden" id="booking-class-name">
+        
+        <div class="form-group">
+          <label>Selected Session</label>
+          <input type="text" id="display-class-name" class="form-control" readonly style="background: rgba(255,255,255,0.05); color: var(--primary); font-weight:700;">
+        </div>
+
+        <div class="form-group">
+          <label for="book-name">Your Full Name</label>
+          <input type="text" id="book-name" class="form-control" required placeholder="John Doe">
+        </div>
+
+        <div class="form-group">
+          <label for="book-email">Email Address</label>
+          <input type="email" id="book-email" class="form-control" required placeholder="john@example.com">
+        </div>
+
+        <div class="form-group">
+          <label for="book-phone">Phone Number</label>
+          <input type="tel" id="book-phone" class="form-control" required placeholder="+91 98765 43210">
+        </div>
+
+        <div class="form-group">
+          <label for="book-time">Select Time Slot</label>
+          <select id="book-time" class="form-control" required>
+            <option value="">-- Choose Slot --</option>
+            <option value="06:00 AM - 07:00 AM">06:00 AM - 07:00 AM (Early Rise)</option>
+            <option value="09:00 AM - 10:00 AM">09:00 AM - 10:00 AM (Morning Push)</option>
+            <option value="05:00 PM - 06:00 PM">05:00 PM - 06:00 PM (Evening Grind)</option>
+            <option value="07:00 PM - 08:00 PM">07:00 PM - 08:00 PM (Late Session)</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Confirm Slot Booking</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Notification Toast message box -->
+  <div class="toast-msg" id="toast-message-box">Booking Confirmed!</div>
+
+  <!-- Javascript Scripts -->
+  <script src="/js/three-scene.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>
